@@ -6,8 +6,10 @@ import android.os.AsyncTask;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     int pos=0;
     List<String> li;
-    List<String> li1;
+    List<String> li1,li2,li3;
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     RecyclerView.Adapter adapter;
@@ -156,6 +158,8 @@ public class MainActivity extends AppCompatActivity {
 
         new doit().execute();
 
+        new doit1().execute();
+
     }
 
     public class doit extends AsyncTask<Void, Void, Void> {
@@ -246,13 +250,37 @@ public class MainActivity extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
 
             try {
-                Document document=Jsoup.connect("").get();
-                
+                li2 = new ArrayList<>();
+                li3 = new ArrayList<>();
+                for (int i = 1; i <= 10; i++) {
+                    Document document = Jsoup.connect("http://www.hdwallpapers.in/latest_wallpapers/page/"+i).get();
+                    Elements elements = document.getElementsByTag("ul");
+                    for (Element e : elements) {
+
+                        if (e.attr("class").equals("wallpapers")) {
+
+                            Elements a = e.getElementsByTag("a");
+                            for (Element a1 : a) {
+
+                                String href = a1.attr("href");
+                                li2.add(href);
+                                Element img = a1.getElementsByTag("img").first();
+                                String src = img.attr("src");
+                                li3.add(src);
+
+                            }
 
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                        }
+
+                    }
+
+                }
+
+                }catch(IOException e){
+                    e.printStackTrace();
+                }
+
 
 
             return null;
@@ -261,6 +289,16 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+
+           // layoutManager1 = new LinearLayoutManager(MainActivity.this);
+
+            layoutManager1=new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+            layoutManager1.setAutoMeasureEnabled(true);
+            recyclerView1.setLayoutManager(layoutManager1);
+            adapter1 = new RecyclerAdapter_main(li2, li3, MainActivity.this);
+            recyclerView1.setAdapter(adapter1);
+
+
         }
 
     }

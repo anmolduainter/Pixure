@@ -1,25 +1,27 @@
 package com.example.joginderpal.imagedownloader_final;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 /**
  * Created by joginderpal on 24-03-2017.
  */
-public class RecyclerAdapter  extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
+public class RecyclerAdapter_main  extends RecyclerView.Adapter<RecyclerAdapter_main.ViewHolder> {
     int j=0;
     List<String> li1,li;
     Typeface mycustomfont;
     Context ctx;
-    public RecyclerAdapter(List<String> li, List<String> li1, Context ctx) {
+    public RecyclerAdapter_main(List<String> li, List<String> li1, Context ctx) {
 
         this.li=li;
         this.li1=li1;
@@ -30,19 +32,19 @@ public class RecyclerAdapter  extends RecyclerView.Adapter<RecyclerAdapter.ViewH
 
     class ViewHolder extends RecyclerView.ViewHolder{
         private int currentitem;
-        public TextView itemTitle;
+        public ImageView im;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            itemTitle= (TextView) itemView.findViewById(R.id.tx);
+            im= (ImageView) itemView.findViewById(R.id.image_recycler_main);
             //  itemTitle.setTypeface(mycustomfont);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     int position=getAdapterPosition();
-                    Intent i=new Intent(ctx,second.class);
-                    i.putExtra("link",li1.get(position));
-                    ctx.startActivity(i);
+                    //  Intent i=new Intent(ctx,second.class);
+                    //   i.putExtra("link",li1.get(position));
+                    //  ctx.startActivity(i);
 
                 }
             });
@@ -54,17 +56,17 @@ public class RecyclerAdapter  extends RecyclerView.Adapter<RecyclerAdapter.ViewH
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
 
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.card_layout,parent,false);
+        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.card_layout_main,parent,false);
         RecyclerView.ViewHolder v=new ViewHolder(view);
-
-
 
         return (ViewHolder) v;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.itemTitle.setText(li.get(position));
+
+
+        Picasso.with(ctx).load("http://www.hdwallpapers.in"+li1.get(position)).fit().into(holder.im);
 
      /*   for (int i=1;i<li.size();i++) {
             if (j == 0) {

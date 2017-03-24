@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<io.github.yuweiguocn.lib.squareloading.SquareLoading
+    android:layout_width="match_parent"
+    android:layout_height="45dp"
+    android:background="@color/colorPrimaryDark"
+    app:squareColor="@android:color/white"
+    app:squareSize="15dp"
+    app:squareCorner="2dp"
+    app:dividerSize="3dp"
+    app:xCount="10"
+    app:yCount="10"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android" />
+
+

@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="100dp"
-    app:cardBackgroundColor="#f22">
+    app:cardBackgroundColor="#E0F2F1">
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -12,7 +12,7 @@
             android:id="@+id/tx"
             android:text="HELLO"
             android:typeface="serif"
-            android:textColor="#fff"
+            android:textColor="#000"
             android:textSize="25dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
