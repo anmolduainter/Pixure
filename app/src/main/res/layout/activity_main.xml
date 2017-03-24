@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/rel"
+    tools:context="com.example.joginderpal.imagedownloader_final.MainActivity">
+
+   <include layout="@layout/app_bar"
+       android:id="@+id/toolbar"></include>
+
+
+   <android.support.v7.widget.RecyclerView
+       android:id="@+id/rvactivity_main"
+       android:layout_width="match_parent"
+       android:layout_marginTop="60dp"
+       android:layout_height="match_parent"
+       android:scrollbars="vertical"
+       ></android.support.v7.widget.RecyclerView>
+
+
+
+</RelativeLayout>
