@@ -57,11 +57,11 @@ public class RecyclerAdapterone extends RecyclerView.Adapter<RecyclerView.ViewHo
               //      Animation anim=AnimationUtils.loadAnimation(ctx,R.anim.move);
                 //    itemView.startAnimation(anim);
                   //  if (anim.hasEnded()) {
-                    //    Intent intent = new Intent(ctx, Third.class);
-                    //    intent.putExtra("image", l3.get(position));
-                     //   intent.putExtra("linking",l5.get(position));
+                       Intent intent = new Intent(ctx, Third.class);
+                        intent.putExtra("image", l3.get(position));
+                        intent.putExtra("linking",l5.get(position));
                        // ctx.startActivity(intent,options.toBundle());
-                   // ctx.startActivity(intent);
+                    ctx.startActivity(intent);
                     //}
                 }
             });
@@ -82,11 +82,11 @@ public class RecyclerAdapterone extends RecyclerView.Adapter<RecyclerView.ViewHo
                 @Override
                 public void onClick(View view) {
                     int position=getAdapterPosition();
-                  //  Intent intent=new Intent(ctx,Third.class);
-                  //  intent.putExtra("image",l4.get(position));
-                 ///   intent.putExtra("linking",l6.get(position));
+                    Intent intent=new Intent(ctx,Third.class);
+                    intent.putExtra("image",l4.get(position));
+                    intent.putExtra("linking",l6.get(position));
                     //ctx.startActivity(intent,options.toBundle());
-                 //   ctx.startActivity(intent);
+                    ctx.startActivity(intent);
                 }
             });
 
@@ -94,10 +94,10 @@ public class RecyclerAdapterone extends RecyclerView.Adapter<RecyclerView.ViewHo
                 @Override
                 public void onClick(View view) {
                     int position=getAdapterPosition();
-                 /*   Intent intent=new Intent(ctx,Third.class);
+                    Intent intent=new Intent(ctx,Third.class);
                     intent.putExtra("image",l4.get(position+1));
                      intent.putExtra("linking",l6.get(position+1));
-                    ctx.startActivity(intent);*/
+                    ctx.startActivity(intent);
                 }
             });
 
