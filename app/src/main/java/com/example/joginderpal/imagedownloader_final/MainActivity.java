@@ -2,7 +2,11 @@ package com.example.joginderpal.imagedownloader_final;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +14,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +26,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -28,18 +35,23 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     int pos=0;
+    int page_load=0;
+    private boolean loading = true;                                // LOAD MORE RECYCLER VIEW
+    int pastVisiblesItems, visibleItemCount, totalItemCount;        // SAME ABOVE
     List<String> li;
-    List<String> li1,li2,li3;
+    List<String> li1;
+    LinkedList<String> li2,li3;
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     RecyclerView.Adapter adapter;
     RecyclerView recyclerView1;
-    RecyclerView.LayoutManager layoutManager1;
+    GridLayoutManager layoutManager1;
     RecyclerView.Adapter adapter1;
 
     @Override
@@ -47,14 +59,64 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         recyclerView1= (RecyclerView) findViewById(R.id.rvactivity_main);
+        AppBarLayout appBarLayout= (AppBarLayout) findViewById(R.id.app_bar);
+        final CollapsingToolbarLayout collapsingToolbarLayout= (CollapsingToolbarLayout) findViewById(R.id.collapsinggToolbar);
+        Toolbar toolbar= (Toolbar) findViewById(R.id.tooolbar);
+
+        setSupportActionBar(toolbar);
         LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View v = vi.inflate(R.layout.section, null);
         v.setVisibility(View.INVISIBLE);
         recyclerView= (RecyclerView) v.findViewById(R.id.rvsection);
+        layoutManager1=new GridLayoutManager(getApplicationContext(),2);
+        layoutManager1.setAutoMeasureEnabled(true);
+        recyclerView1.setLayoutManager(layoutManager1);
         ViewGroup insertPoint = (ViewGroup) findViewById(R.id.rel);
         insertPoint.addView(v, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        final ImageButton im1= (ImageButton) insertPoint.findViewById(R.id.rot);
 
-        ImageButton im1= (ImageButton) findViewById(R.id.rot);
+        ImageButton im2= (ImageButton) v.findViewById(R.id.rot1);
+
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+
+               boolean a=true;
+               int scroll=-1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+
+                if (scroll==-1){
+                    scroll=appBarLayout.getTotalScrollRange();
+                }
+
+                if (scroll+verticalOffset==0){
+
+                    im1.setVisibility(View.VISIBLE);
+                    collapsingToolbarLayout.setTitle("Pixure");
+                    collapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
+                    Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/Pacifico.ttf");
+                    collapsingToolbarLayout.setCollapsedTitleTypeface(custom_font);
+                    a=true;
+                }
+                else if (a){
+
+                    collapsingToolbarLayout.setTitle("Pixure");
+                    collapsingToolbarLayout.setExpandedTitleColor(Color.WHITE);
+                    collapsingToolbarLayout.setExpandedTitleGravity(Gravity.CENTER_HORIZONTAL);
+                    Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/Pacifico.ttf");
+                    collapsingToolbarLayout.setExpandedTitleTypeface(custom_font);
+                    im1.setVisibility(View.INVISIBLE);
+                    a=false;
+                }
+
+
+            }
+        });
+
+
+
+
+
         im1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v1) {
@@ -62,11 +124,11 @@ public class MainActivity extends AppCompatActivity {
 
                 if (pos==0){
 
-                    RotateAnimation rotate1 = new RotateAnimation(180,0,
+                    RotateAnimation rotate1 = new RotateAnimation(-90,0,
                             Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
                             0.5f);
                     rotate1.setDuration(500);
-                    TranslateAnimation translateAnimation=new TranslateAnimation(0.0f,0.0f,-1400.0f,0.0f);
+                    RotateAnimation translateAnimation=new RotateAnimation(-90,0, Animation.RELATIVE_TO_SELF,0f,Animation.RELATIVE_TO_SELF,0f);
                     translateAnimation.setDuration(500);
                     translateAnimation.setInterpolator(new LinearOutSlowInInterpolator());
                     Animation fade=new AlphaAnimation(0,1);
@@ -107,11 +169,11 @@ public class MainActivity extends AppCompatActivity {
                 else if (pos==1){
 
 
-                    RotateAnimation rotate1 = new RotateAnimation(-180,0,
+                    RotateAnimation rotate1 = new RotateAnimation(0,-90,
                             Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
                             0.5f);
                     rotate1.setDuration(500);
-                    TranslateAnimation translateAnimation=new TranslateAnimation(0,0,0,-2400);
+                    RotateAnimation translateAnimation=new RotateAnimation(0,-90, Animation.RELATIVE_TO_SELF,0f,Animation.RELATIVE_TO_SELF,0f);
                     translateAnimation.setDuration(500);
                     translateAnimation.setInterpolator(new LinearOutSlowInInterpolator());
                     Animation fade=new AlphaAnimation(1,0);
@@ -154,6 +216,44 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+
+
+        li2 = new LinkedList<>();
+        li3 = new LinkedList<>();
+
+        recyclerView1.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+
+                if(dy>0){
+
+                    visibleItemCount=layoutManager1.getChildCount();
+
+                    totalItemCount=layoutManager1.getItemCount();
+                    pastVisiblesItems =layoutManager1.findFirstVisibleItemPosition();
+
+                    if (loading){
+
+                        if ((visibleItemCount+pastVisiblesItems)>=totalItemCount){
+
+
+                            loading=false;
+                            new doit1().execute();
+                          //  loading=true;
+
+                        }
+
+                    }
+
+                }
+
+
+
+
+            }
+        });
+
 
 
         new doit().execute();
@@ -240,20 +340,26 @@ public class MainActivity extends AppCompatActivity {
 
     public class doit1 extends AsyncTask<Void,Void,Void>{
 
+       ProgressDialog pd;
+        int a=0;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            a=li2.size();
+            page_load++;
+            pd=new ProgressDialog(MainActivity.this);
+            pd.setMessage("Page Number : "+page_load);
+            pd.show();
+
         }
 
         @Override
         protected Void doInBackground(Void... params) {
 
             try {
-                li2 = new ArrayList<>();
-                li3 = new ArrayList<>();
-                for (int i = 1; i <= 10; i++) {
-                    Document document = Jsoup.connect("http://www.hdwallpapers.in/latest_wallpapers/page/"+i).get();
+            //    for (int i = 1; i <= 10; i++) {
+                    Document document = Jsoup.connect("http://www.hdwallpapers.in/latest_wallpapers/page/"+page_load).get();
                     Elements elements = document.getElementsByTag("ul");
                     for (Element e : elements) {
 
@@ -275,7 +381,7 @@ public class MainActivity extends AppCompatActivity {
 
                     }
 
-                }
+              //  }
 
                 }catch(IOException e){
                     e.printStackTrace();
@@ -288,15 +394,17 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
+            super.onPostExecute(aVoid);                         // CANT UNDERSTAND WHAT WENT WRONG ???????????????????????
 
+            pd.dismiss();
            // layoutManager1 = new LinearLayoutManager(MainActivity.this);
-
-            layoutManager1=new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
-            layoutManager1.setAutoMeasureEnabled(true);
-            recyclerView1.setLayoutManager(layoutManager1);
             adapter1 = new RecyclerAdapter_main(li2, li3, MainActivity.this);
+           recyclerView1.setScrollBarSize(20);
+            recyclerView1.setVerticalScrollBarEnabled(true);
+            recyclerView1.getChildAt(a);
             recyclerView1.setAdapter(adapter1);
+           // adapter1.notifyDataSetChanged();
+            loading =true;
 
 
         }

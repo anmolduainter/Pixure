@@ -4,16 +4,23 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="100dp"
-    app:cardBackgroundColor="#E0F2F1">
+    app:cardBackgroundColor="@color/colorPrimary">
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_marginTop="39dp"
+            android:layout_marginLeft="60dp"
+            android:background="@drawable/circle"
+            android:layout_width="10dp"
+            android:layout_height="10dp" />
+
         <TextView
             android:id="@+id/tx"
             android:text="HELLO"
-            android:typeface="serif"
-            android:textColor="#000"
-            android:textSize="25dp"
+            android:textColor="#fff"
+            android:textSize="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

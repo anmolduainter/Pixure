@@ -2,13 +2,31 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:id="@+id/section"
-    android:elevation="20dp"
+    android:elevation="5dp"
+    android:background="@color/colorPrimary"
     android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#fff"
+        android:text="Close"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="15dp"
+        android:elevation="2dp"
+        android:textSize="15dp"/>
+
+    <ImageView
+        android:id="@+id/image_section"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@drawable/back"/>
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvsection"
+        android:layout_below="@id/image_section"
         android:layout_width="match_parent"
-        android:layout_marginTop="60dp"
         android:layout_height="match_parent"
         android:scrollbars="vertical"
         ></android.support.v7.widget.RecyclerView>
