@@ -1,16 +1,29 @@
 package com.example.joginderpal.imagedownloader_final;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,17 +47,22 @@ public class RecyclerAdapter_main  extends RecyclerView.Adapter<RecyclerAdapter_
         private int currentitem;
         public ImageView im;
 
+        public ImageButton im1;
         public ViewHolder(View itemView) {
             super(itemView);
             im= (ImageView) itemView.findViewById(R.id.image_recycler_main);
+            im1= (ImageButton) itemView.findViewById(R.id.activity_main_download);
             //  itemTitle.setTypeface(mycustomfont);
-            itemView.setOnClickListener(new View.OnClickListener() {
+            im1.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
-                    int position=getAdapterPosition();
-                    //  Intent i=new Intent(ctx,second.class);
-                    //   i.putExtra("link",li1.get(position));
-                    //  ctx.startActivity(i);
+                public void onClick(View v) {
+
+                    int pos=getAdapterPosition();
+                     Intent i=new Intent(ctx,Third.class);
+
+                     i.putExtra("linking",li.get(pos));
+                    i.putExtra("image",li1.get(pos));
+                    ctx.startActivity(i);
 
                 }
             });
@@ -86,5 +104,7 @@ public class RecyclerAdapter_main  extends RecyclerView.Adapter<RecyclerAdapter_
     public int getItemCount() {
         return li.size();
     }
+
+
 }
 

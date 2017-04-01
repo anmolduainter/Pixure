@@ -35,7 +35,7 @@ import java.util.List;
 public class Third extends Activity {
     List<String> ls1;
     TextView tx;
-    Button b1;
+    ImageView b1;
     List<String> ls2;
     Context ctx=Third.this;
    ImageView img;
@@ -58,7 +58,7 @@ public class Third extends Activity {
         tx1= (TextView) findViewById(R.id.tx);
         mycustomfont = Typeface.createFromAsset(getAssets(), "fonts/Pacifico.ttf");
          tx1.setTypeface(mycustomfont);
-        b1 = (Button) findViewById(R.id.button);
+        b1 = (ImageView) findViewById(R.id.button);
        // tx.setText(a);
         img= (ImageView) findViewById(R.id.imageView);
         initanimation();

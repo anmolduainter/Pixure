@@ -3,19 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:elevation="30dp"
-    android:layout_marginTop="10dp"
-    android:layout_marginRight="10dp"
-    android:layout_marginLeft="10dp"
-    app:cardCornerRadius="10dp">
+    android:layout_height="70dp"
+    android:layout_marginTop="2dp"
+    app:cardBackgroundColor="@color/colorAccent"
+    android:layout_marginLeft="2dp"
+    android:layout_marginRight="2dp"
+    android:elevation="2dp">
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
             android:id="@+id/tax3"
             android:text="HELLO"
-            android:textSize="30dp"
+            android:textSize="20dp"
+            android:textColor="#fff"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

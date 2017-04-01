@@ -1,22 +1,33 @@
 package com.example.joginderpal.imagedownloader_final;
 
+import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -25,6 +36,8 @@ import android.view.animation.AnimationSet;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
+import android.webkit.MimeTypeMap;
+import android.webkit.URLUtil;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
@@ -33,6 +46,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -51,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView.LayoutManager layoutManager;
     RecyclerView.Adapter adapter;
     RecyclerView recyclerView1;
+    BottomSheetDialogFragment myBottomSheet,myBottomSheet1;
     GridLayoutManager layoutManager1;
     RecyclerView.Adapter adapter1;
 
@@ -239,8 +254,8 @@ public class MainActivity extends AppCompatActivity {
 
 
                             loading=false;
-                            new doit1().execute();
-                          //  loading=true;
+                            new doit2().execute();
+                           // loading=true;
 
                         }
 
@@ -404,6 +419,81 @@ public class MainActivity extends AppCompatActivity {
             recyclerView1.getChildAt(a);
             recyclerView1.setAdapter(adapter1);
            // adapter1.notifyDataSetChanged();
+//            loading =true;
+
+
+        }
+
+    }
+
+
+    public class doit2 extends AsyncTask<Void,Void,Void>{
+
+
+        ProgressDialog pd;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            page_load++;
+            pd=new ProgressDialog(MainActivity.this);
+            pd.setMessage("Page Number : "+page_load);
+            pd.show();
+        }
+
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            try {
+                //    for (int i = 1; i <= 10; i++) {
+                Document document = Jsoup.connect("http://www.hdwallpapers.in/latest_wallpapers/page/"+page_load).get();
+                Elements elements = document.getElementsByTag("ul");
+                for (Element e : elements) {
+
+                    if (e.attr("class").equals("wallpapers")) {
+
+                        Elements a = e.getElementsByTag("a");
+                        for (Element a1 : a) {
+
+                            String href = a1.attr("href");
+                            li2.add(href);
+                            Element img = a1.getElementsByTag("img").first();
+                            String src = img.attr("src");
+                            li3.add(src);
+
+                        }
+
+
+                    }
+
+                }
+
+                //  }
+
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+
+
+
+            return null;
+
+
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            pd.dismiss();
+            //layoutManager1 = new LinearLayoutManager(MainActivity.this);
+          //  adapter1 = new RecyclerAdapter_main(li2, li3, MainActivity.this);
+            recyclerView1.setScrollBarSize(20);
+            recyclerView1.setVerticalScrollBarEnabled(true);
+    //        recyclerView1.getChildAt(a);
+  //           recyclerView1.setAdapter(adapter1);
+             adapter1.notifyDataSetChanged();
             loading =true;
 
 
@@ -412,5 +502,128 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater=getMenuInflater();
+        inflater.inflate(R.menu.menu_search,menu);
+        MenuItem item=menu.findItem(R.id.menusearchone);
+        SearchView searchView= (SearchView) item.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                if (query.contains("@gif") || query.contains("@ gif")){
+
+                    myBottomSheet = MyBottomSheetDialogFragment.newInstance(query);
+                    myBottomSheet.show(getSupportFragmentManager(), myBottomSheet.getTag());
+
+                }
+
+                else if (query.contains("@youtube")){
+
+                    Intent intent=new Intent(MainActivity.this,youtube.class);
+                    startActivity(intent);
+
+                }
+
+                else if (query.contains("@url")){
+
+                    String href = query.replace("@url","");
+
+                    File direct = new File(Environment.getExternalStorageDirectory()
+                            + "/image_downloader");
+
+                    if (!direct.exists()) {
+                        direct.mkdirs();
+                    }
+
+
+                    DownloadManager.Request request = new DownloadManager.Request(Uri.parse(href));
+                    request.setTitle("Image Downloading");
+                    request.setDescription("Downloading.....");
+                    //   request.setMimeType("application/jpeg");
+                    request.allowScanningByMediaScanner();
+                    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                    String filename = URLUtil.guessFileName(href, null, MimeTypeMap.getFileExtensionFromUrl(href));
+                    //      request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,filename);
+                    request.setDestinationInExternalPublicDir("/image_downloader", filename);
+                    DownloadManager manager = (DownloadManager)getSystemService(Context.DOWNLOAD_SERVICE);
+                    manager.enqueue(request);
+
+
+
+                }
+
+                else if (query.contains("@tut")){
+
+                //    Intent i=new Intent(MainActivity.this,Splashtut.class);
+                //    startActivity(i);
+                    //overridePendingTransition(R.anim.bounce,R.anim.bounce1);
+
+                }
+
+                else {
+                    Intent intent = new Intent(MainActivity.this, search.class);
+                    intent.putExtra("link", query);
+                    // intent.putExtra("text",query);
+                    startActivity(intent);
+
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+
+                return false;
+            }
+        });
+
+        MenuItem item1=menu.findItem(R.id.action_gallery);
+        item1.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+
+                Intent i=new Intent(MainActivity.this,Gallery.class);
+                startActivity(i);
+                return false;
+            }
+        });
+
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder alert=new AlertDialog.Builder(this);
+        alert.setMessage("Are you you sure you want to exit");
+        alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                MainActivity.this.finish();
+
+            }
+        });
+        alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+
+
+
+            }
+        });
+
+        AlertDialog alertDialog=alert.create();
+        alertDialog.show();
+    }
 }
 

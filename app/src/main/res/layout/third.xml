@@ -4,14 +4,17 @@
     android:layout_height="match_parent"
     android:background="#000">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Download"
+    <ImageView
         android:id="@+id/button"
         android:layout_alignParentBottom="true"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginBottom="60dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="54dp" />
+        android:src="@drawable/download"
+        android:background="#D53F41"/>
+
 
     <ImageView
         android:layout_width="wrap_content"
@@ -28,7 +31,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/tx"
         android:textColor="#fff"
-        android:text="Click on Download and Select Resolution"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Click on Download Button"
         android:textSize="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="5dp"/>
